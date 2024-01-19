@@ -18,10 +18,21 @@ export interface Post {
   date_updated: null | string;
   title: string;
   content: string;
-  tags: number[];
+  tags: number[] | PostTag[];
   category: string;
   description: string;
   slug: string;
+}
+
+export interface PostTag {
+  id: number;
+  post_id: Post["id"] | Post;
+  tag_id: Tag["id"] | Tag;
+}
+
+export interface Tag {
+  id: number;
+  name: string;
 }
 
 export interface faq {
@@ -32,4 +43,5 @@ export interface Scheema {
   category: Category[]; // regular collections are array types
   post: Post[]; // regular collections are array types
   faq: faq[];
+  tag: Tag[];
 }

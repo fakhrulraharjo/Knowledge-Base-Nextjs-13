@@ -230,7 +230,7 @@ export default async function Page({ params }: PageProps) {
                     .
                   </p>
                 </div>
-              </section>
+              </section>*/}
               <section
                 id="ht-kb-exit-widget-2"
                 className="block p-8 m-0 text-sm rounded bg-gray-300 dark:bg-slate-900"
@@ -240,11 +240,10 @@ export default async function Page({ params }: PageProps) {
                   className="mx-0 mt-0 mb-4 font-sans normal-case"
                   style={{ fontWeight: "bold", lineHeight: "1.3" }}
                 >
-                  Need support?
+                  Butuh Bantuan?
                 </h3>
                 <div className="mx-0 mt-0 mb-3 leading-5">
-                  Can&apos;t find the answer you&apos;re looking for? We&apos;re
-                  here to help!
+                  Tidak dapat menemukan panduan yang anda butuhkan?
                 </div>
                 <Link
                   className="inline-block py-3 px-4 text-xs font-semibold leading-none text-white uppercase bg-cyan-800 cursor-pointer hover:outline-0 rounded-full"
@@ -252,7 +251,7 @@ export default async function Page({ params }: PageProps) {
                 >
                   CONTACT SUPPORT
                 </Link>
-              </section> */}
+              </section>
             </aside>
           </div>
         </div>

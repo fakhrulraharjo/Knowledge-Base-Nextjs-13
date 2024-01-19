@@ -35,3 +35,25 @@ export const useGetFaq = (query?: Query<Scheema, Post>) => {
   });
   return t;
 };
+
+export const useGetTag = () => {
+  const t = useQuery({
+    queryKey: ["tags"],
+    queryFn: async () => {
+      return await client.request(readItems("tag"));
+    },
+    refetchOnMount: false,
+  });
+  return t;
+};
+
+export const useGetPostTag = () => {
+  const t = useQuery({
+    queryKey: ["tags"],
+    queryFn: async () => {
+      return await client.request(readItems("tag"));
+    },
+    refetchOnMount: false,
+  });
+  return t;
+};

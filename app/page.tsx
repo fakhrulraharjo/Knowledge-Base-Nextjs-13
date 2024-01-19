@@ -4,6 +4,7 @@ import SearchPage from "@/components/Banner";
 import Image from "next/image";
 import { useGetCategory, useGetPost } from "@/components/directus";
 import { Suspense, useEffect, useMemo } from "react";
+import { useGetTag } from "@/components/directus/get";
 
 const categoriesData = [
   {
@@ -16,7 +17,9 @@ const categoriesData = [
 
 export default function Home() {
   const { data: categoriesData } = useGetCategory();
-  const { data: postData } = useGetPost();
+  const { data: postData } = useGetPost({});
+  const { data: tagsData } = useGetTag();
+
   const categories = useMemo(() => {
     if (!categoriesData) return [];
     return categoriesData.map((v, i) => {
@@ -31,9 +34,8 @@ export default function Home() {
 
   const popularArticles = useMemo(() => {
     if (!postData || !categoriesData) return [];
-    const ddd = postData.filter((v) => v.tags.includes(1));
 
-    return ddd.map((v) => {
+    return postData.map((v) => {
       const ct = categoriesData.find((f) => f.id == v.category);
       return {
         title: v.title,
