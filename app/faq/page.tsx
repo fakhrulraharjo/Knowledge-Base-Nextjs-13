@@ -30,12 +30,14 @@ const FAQ = () => {
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold leading-tight">FAQ</h1>
           <div className="mt-12">
-            {faqItems.map((item, index) => (
-              <div key={index} className="mb-8">
-                <h2 className="text-xl font-bold mb-2">{item.question}</h2>
-                <p className="">{item.answer}</p>
-              </div>
-            ))}
+            {faqItems
+              ? faqItems.map((item, index) => (
+                  <div key={index} className="mb-8">
+                    <h2 className="text-xl font-bold mb-2">{item.question}</h2>
+                    <p className="">{item.answer}</p>
+                  </div>
+                ))
+              : null}
           </div>
         </div>
       </div>

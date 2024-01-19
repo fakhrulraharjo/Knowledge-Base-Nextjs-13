@@ -8,7 +8,7 @@ const nextConfig = {
     return [
       {
         source: "/cms/:path*",
-        destination: "http://34.128.76.220/:path*",
+        destination: `${process.env.DIRECTUS_HOST}/:path*`,
       },
     ];
   },
