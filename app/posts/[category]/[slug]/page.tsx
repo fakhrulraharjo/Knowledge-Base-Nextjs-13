@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
-import { allPosts } from "contentlayer/generated";
+// import { allPosts } from "contentlayer/generated";
 import { Metadata } from "next";
 import { Mdx } from "@/components/mdx-components";
 import PageNavigation from "@/components/PageNavigation";
+import { client } from "@/components/directus";
+import { readItems } from "@directus/sdk";
 
 interface CategoryPostProps {
   params: {
@@ -14,15 +16,15 @@ interface CategoryPostProps {
 export async function generateStaticParams(
   params: any
 ): Promise<CategoryPostProps["params"][]> {
+  const allPosts = await client.request(readItems("post"));
   return allPosts.map((post) => {
-    const [category, slug] = post.slugAsParams.split("/");
-    return { category, slug };
+    // const [category, slug] = post.slugAsParams.split("/");
+    return { category: post.category, slug: post.slug };
   });
 }
 
 export default async function PostPage(postProps: CategoryPostProps) {
   const post = await getPostFromParams(postProps);
-
   if (!post) {
     notFound();
   }
@@ -52,7 +54,7 @@ export default async function PostPage(postProps: CategoryPostProps) {
             </p>
           )}
           <hr className="my-4" />
-          <Mdx code={post.body.code} />
+          <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
         </article>
       </div>
 
@@ -62,13 +64,11 @@ export default async function PostPage(postProps: CategoryPostProps) {
 }
 
 async function getPostFromParams(postProps: CategoryPostProps) {
-  const post = allPosts.find((post) => {
-    return (
-      post.slugAsParams ===
-      `${postProps.params.category}/${postProps.params.slug}`
-    );
-  });
+  const allPosts = await client.request(readItems("post"));
 
+  const post = allPosts.find((post) => {
+    return post.slug == postProps.params.slug;
+  });
   if (!post) {
     null;
   }

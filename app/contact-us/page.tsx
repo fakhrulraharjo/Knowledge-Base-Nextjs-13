@@ -14,7 +14,9 @@ const ContactPage: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-6 2xl:grid-cols-3">
-      <PageNavigation paths={[{ path: "/contact-us", label: "Contact Us" }]} />
+      <PageNavigation
+        paths={[{ path: "/contact-us", label: "Hubungi Kami" }]}
+      />
       <div></div>
       <div className="w-full sm:col-span-1 md:col-span-4 2xl:col-span-1 py-8">
         <div className="">
@@ -24,7 +26,7 @@ const ContactPage: React.FC = () => {
                 htmlFor="full_name"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                First name
+                Nama
               </label>
               <input
                 type="text"
@@ -60,7 +62,7 @@ const ContactPage: React.FC = () => {
                 htmlFor="message"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Message
+                Pesan
               </label>
               <textarea
                 id="message"
@@ -76,7 +78,7 @@ const ContactPage: React.FC = () => {
                 className="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 type="submit"
               >
-                Submit
+                Kirim
               </button>
             </div>
           </form>

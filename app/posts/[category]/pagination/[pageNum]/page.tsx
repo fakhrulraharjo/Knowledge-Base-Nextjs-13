@@ -1,11 +1,14 @@
 import { notFound } from "next/navigation";
-import { allPosts } from "contentlayer/generated";
+// import { allPosts } from "contentlayer/generated";
 
 import { Metadata } from "next";
 import Link from "next/link";
 import SearchPage from "@/components/Banner";
 import SearchPosts from "@/components/SearchPosts";
 import PageNavigation from "@/components/PageNavigation";
+import { client } from "@/components/directus";
+import { readItems } from "@directus/sdk";
+import { Post } from "@/components/directus/type";
 
 interface PageProps {
   params: {
@@ -28,9 +31,15 @@ function getPostsForPage(posts: any, pageNumber: any, postsPerPage: any) {
 }
 
 async function getPostFromParams(params: PageProps["params"]) {
-  const filteredPosts = allPosts.filter((post) =>
-    post.slugAsParams.startsWith(params.category)
-  );
+  const allPosts = await client.request(readItems("post"));
+  const categories = await client.request(readItems("category"));
+
+  const filteredPosts = allPosts.filter((post) => {
+    const cat = categories.find((va) => va.slug == params.category);
+    if (!cat) return false;
+    return cat.id == post.category;
+  });
+
   // write a function that takes posts and page number and posts per page and returns the posts for that page
   const posts = getPostsForPage(filteredPosts, params.pageNum, POSTS_PER_PAGE);
 
@@ -57,16 +66,26 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams(): Promise<PageProps["params"][]> {
-  let posts = allPosts.map((post) => post.slugAsParams);
+  const allPosts = await client.request(readItems("post"));
+  let posts = allPosts.map((post) => `${post.category}/${post.slug}`);
   return mapPostsToPages(posts, 2);
 }
 
 export default async function Page({ params }: PageProps) {
   const posts = await getPostFromParams(params);
+  const allPosts = await client.request(readItems("post"));
+  const allCategory = await client.request(readItems("category"));
+
   const totalPages = Math.ceil(
-    allPosts.filter((post) => post.slugAsParams.startsWith(params.category))
-      .length / POSTS_PER_PAGE
+    posts.filter((post: { category: string }) =>
+      post.category.startsWith(params.category)
+    ).length / POSTS_PER_PAGE
   );
+
+  const getHreef = (post: Post, category: typeof allCategory) => {
+    const ct = category.find((f) => f.id == post.category);
+    return `/${ct?.slug ?? ""}/${post.slug}`;
+  };
 
   if (!posts) {
     notFound();
@@ -92,7 +111,7 @@ export default async function Page({ params }: PageProps) {
                 style={{ content: '""', listStyle: "none" }}
               >
                 {posts.map((post: any) => (
-                  <Link href={post.slug} key={post.title}>
+                  <Link href={getHreef(post, allCategory)} key={post.title}>
                     <li
                       className="px-0 pt-0 pb-5 mx-0 mt-0 mb-5 text-left border-b border-solid border-neutral-200"
                       style={{ listStyle: "outside none none" }}
@@ -103,9 +122,9 @@ export default async function Page({ params }: PageProps) {
                         itemType="https://schema.org/CreativeWork"
                         style={{ listStyle: "outside none none" }}
                       >
-                        <a
+                        <Link
                           className="block  bg-transparent cursor-pointer hover:outline-0"
-                          href="https://help.mindmappro.com/knowledge-base/what-is-mind-doodle/"
+                          href={`/posts/${getHreef(post, allCategory)}`}
                           style={{
                             textDecoration: "none",
                             listStyle: "outside none none",
@@ -127,7 +146,7 @@ export default async function Page({ params }: PageProps) {
                           >
                             {post.description}
                           </div>
-                        </a>
+                        </Link>
                       </article>
                     </li>
                   </Link>
@@ -173,7 +192,7 @@ export default async function Page({ params }: PageProps) {
               </div>
             </div>
             <aside className="md:col-span-1 col-span-3">
-              <section
+              {/* <section
                 id="text-2"
                 className="block p-8 mx-0 mt-0 mb-5 text-sm rounded bg-gray-300 dark:bg-slate-900"
                 style={{ lineHeight: "1.4" }}
@@ -221,7 +240,7 @@ export default async function Page({ params }: PageProps) {
                 >
                   CONTACT SUPPORT
                 </Link>
-              </section>
+              </section> */}
             </aside>
           </div>
         </div>

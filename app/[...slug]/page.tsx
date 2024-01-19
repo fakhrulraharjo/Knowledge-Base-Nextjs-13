@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { allPages } from "contentlayer/generated";
+// import { allPages } from "contentlayer/generated";
 import { Mdx } from "@/components/mdx-components";
 
 interface PageProps {
@@ -8,6 +8,14 @@ interface PageProps {
     slug: string[];
   };
 }
+
+const allPages = [
+  {
+    slugAsParams: "ssss",
+    title: "ssss",
+    description: "sss",
+  },
+];
 
 async function getPageFromParams(params: PageProps["params"]) {
   const slug = params?.slug?.join("/");
@@ -53,7 +61,7 @@ export default async function PagePage({ params }: PageProps) {
       <h1>{page.title}</h1>
       {page.description && <p className="text-xl">{page.description}</p>}
       <hr />
-      <Mdx code={page.body.code} />
+      {/* <Mdx code={page.body.code} /> */}
     </article>
   );
 }

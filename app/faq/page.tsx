@@ -1,4 +1,6 @@
+"use client";
 import PageNavigation from "@/components/PageNavigation";
+import { useGetFaq } from "@/components/directus/get";
 
 // Define your FAQ item type
 type FAQItem = {
@@ -19,6 +21,7 @@ const faqItems: FAQItem[] = [
 ];
 
 const FAQ = () => {
+  const { data: faqItems } = useGetFaq();
   return (
     <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-6 2xl:grid-cols-3">
       <PageNavigation paths={[{ path: "/faq", label: "FAQ" }]} />
