@@ -8,7 +8,7 @@ import SearchPosts from "@/components/SearchPosts";
 import PageNavigation from "@/components/PageNavigation";
 import { client } from "@/components/directus";
 import { readItems } from "@directus/sdk";
-import { Post } from "@/components/directus/type";
+import { Post, Scheema } from "@/components/directus/type";
 
 interface PageProps {
   params: {
@@ -65,9 +65,21 @@ export async function generateMetadata({
   };
 }
 
+const getPostCategory = (
+  post: Scheema["post"][0],
+  cat: Scheema["category"]
+) => {
+  const cats = cat.find((f) => f.id == post.category);
+  return cats;
+};
+
 export async function generateStaticParams(): Promise<PageProps["params"][]> {
   const allPosts = await client.request(readItems("post"));
-  let posts = allPosts.map((post) => `${post.category}/${post.slug}`);
+  const allCategory = await client.request(readItems("category"));
+
+  let posts = allPosts.map(
+    (post) => `${getPostCategory(post, allCategory)?.slug}/${post.slug}`
+  );
   return mapPostsToPages(posts, 2);
 }
 

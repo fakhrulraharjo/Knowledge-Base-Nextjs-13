@@ -11,10 +11,8 @@ type Post = {
 const SearchPosts = ({ posts }: { posts: Post[] }) => {
   const [fuse, setFuse] = useState<Fuse<Post> | null>(null);
   const [query, setQuery] = useState("");
-  console.log("searchpost", posts);
 
   useEffect(() => {
-    console.log("effect searchpost");
     setFuse(new Fuse(posts, { keys: ["title", "description"] }));
   }, [posts]);
 
@@ -29,7 +27,6 @@ const SearchPosts = ({ posts }: { posts: Post[] }) => {
         type="text"
         value={query}
         onChange={(e) => {
-          console.log(e);
           setQuery(e.target.value);
         }}
         placeholder="Cari Artikel..."

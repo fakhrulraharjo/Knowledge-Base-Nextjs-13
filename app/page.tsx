@@ -17,11 +17,6 @@ const categoriesData = [
 export default function Home() {
   const { data: categoriesData } = useGetCategory();
   const { data: postData } = useGetPost();
-
-  useEffect(() => {
-    console.log(categoriesData);
-    console.log(postData);
-  }, [categoriesData, postData]);
   const categories = useMemo(() => {
     if (!categoriesData) return [];
     return categoriesData.map((v, i) => {

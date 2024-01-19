@@ -3,8 +3,9 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { Mdx } from "@/components/mdx-components";
 import PageNavigation from "@/components/PageNavigation";
-import { client } from "@/components/directus";
+import { Scheema, client } from "@/components/directus";
 import { readItems } from "@directus/sdk";
+import { ca } from "@directus/sdk/dist/index-Szt1hiPf";
 
 interface CategoryPostProps {
   params: {
@@ -13,13 +14,26 @@ interface CategoryPostProps {
   };
 }
 
+const getPostCategory = (
+  post: Scheema["post"][0],
+  cat: Scheema["category"]
+) => {
+  const cats = cat.find((f) => f.id == post.category);
+  return cats;
+};
+
 export async function generateStaticParams(
   params: any
 ): Promise<CategoryPostProps["params"][]> {
   const allPosts = await client.request(readItems("post"));
+  const allCategory = await client.request(readItems("category"));
+
   return allPosts.map((post) => {
     // const [category, slug] = post.slugAsParams.split("/");
-    return { category: post.category, slug: post.slug };
+    return {
+      category: getPostCategory(post, allCategory)?.slug ?? "",
+      slug: post.slug,
+    };
   });
 }
 

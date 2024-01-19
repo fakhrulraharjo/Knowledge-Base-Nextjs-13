@@ -23,3 +23,4 @@ export const client = createDirectus<Scheema>(cmsEnpoint())
   .with(rest());
 
 export { QueryProvider, useGetCategory, useGetPost };
+export type { Scheema };

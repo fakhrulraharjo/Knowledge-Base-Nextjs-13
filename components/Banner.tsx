@@ -14,10 +14,7 @@ const SearchPage = ({ posts }: { posts: Post[] }) => {
   const [query, setQuery] = useState("");
   const { data: postsData } = useGetPost();
 
-  console.log(posts);
-
   useEffect(() => {
-    console.log("useEffect", posts);
     setFuse(new Fuse(posts, { keys: ["title", "description"] }));
   }, [posts]);
 
@@ -35,7 +32,6 @@ const SearchPage = ({ posts }: { posts: Post[] }) => {
         type="text"
         // value={query}
         onChange={(e) => {
-          console.log("onchange");
           setQuery(e.target.value);
         }}
         placeholder="Cari Artikel..."
